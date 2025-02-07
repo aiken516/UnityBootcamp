@@ -37,7 +37,7 @@
 > 이를 Expose해야 스크립트로 수정 가능하며, Parameter 값도 수정 가능
 > 
 > 1. SetFloat(name, value)
-> value는 -80~0까지의 값. 0~1의 값을 이용하기 위해선 Mathf.Log10(value) * 20, 최소값은 0.0001의 형태로 이용
+> value는 -80에서 0까지의 값. 0과 1 사이의 값을 이용하기 위해선 Mathf.Log10(value) * 20, 최소값은 0.0001의 형태로 이용
 
 + Mathf
 > 1. Mathf.Deg2Rad
