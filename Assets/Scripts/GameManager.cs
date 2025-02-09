@@ -44,7 +44,10 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
+    }
 
+    void Start()
+    {
         if (PlayerPrefs.HasKey("Score") && PlayerPrefs.HasKey("CurrentHitValue") &&
             PlayerPrefs.HasKey("RobotUpgradeCount") && PlayerPrefs.HasKey("SuperRobotUpgradeCount"))
         {
@@ -112,6 +115,12 @@ public class GameManager : MonoBehaviour
             RenderSettings.skybox = skyBoxMaterial;
         }
         SetScore();
+    }
+
+    public void OnRobotControllButtonClick()
+    {
+        PlayerManager.instance.PlayerOn();
+        _robotGameObject.SetActive(false);
     }
 
     public void OnUpgradeButtonClick()
