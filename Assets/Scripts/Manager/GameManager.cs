@@ -82,7 +82,7 @@ public class GameManager : MonoBehaviour
             CurrentHitValue += 5;
         }
 
-        UIManager.instance.SetValueUpButton(_valueUpCost, CurrentHitValue - 10);
+        UIManager.instance.SetValueUpButton(_valueUpCost, (CurrentHitValue - 10)/5);
         UIManager.instance.SetScoreBoardText(_score, CurrentHitValue, UpgradeCount);
     }
 
