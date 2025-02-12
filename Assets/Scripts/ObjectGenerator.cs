@@ -7,16 +7,6 @@ public class ObjectGenerator : MonoBehaviour
     [SerializeField] private GameObject prefab;
     [SerializeField] public float power = 1000f;
 
-    /// <summary>
-    /// 점수 추가
-    /// </summary>
-    /// <param name="value">추가량</param>
-    public void ScorePlus(int value)
-    {
-        GameManager.instance.Score += value;
-        GameManager.instance.SetScore();
-    }
-
     void Update()
     {
         if (Input.GetMouseButtonDown(0))

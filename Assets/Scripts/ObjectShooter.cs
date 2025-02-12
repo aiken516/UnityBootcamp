@@ -30,7 +30,7 @@ public class ObjectShooter : MonoBehaviour
         }
         else
         {
-            objectGenerator.GetComponent<ObjectGenerator>().ScorePlus(GameManager.instance.CurrentHitValue * GameManager.instance.UpgradeCount);
+            GameManager.instance.ScorePlus(GameManager.instance.CurrentHitValue * GameManager.instance.UpgradeCount);
             Destroy(gameObject);
         }
     }

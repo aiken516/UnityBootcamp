@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -26,7 +27,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private Button _loadButton;
 
-    public int Score = 0;
+    private int _score = 0;
 
     public int CurrentHitValue = 10;
 
@@ -62,59 +63,55 @@ public class GameManager : MonoBehaviour
         _robotGameObject.SetActive(false);
         _superRobotGameObject.SetActive(false);
 
-        SetScore();
+        PlayerManager.instance.PlayerDeadEvent.PlayerDead += RobotDestroy;
     }
 
-    public void SetScore()
+    public void ScorePlus(int score)
     {
-        _scoreText.text = $"점수: {Score}";
-        _currentHitValueText.text = $"명중 당 점수 : {CurrentHitValue} X {UpgradeCount}";
-
-        _valueUpCostText.text = $"{_valueUpCost}";
-        _robotUpCostText.text = $"{_robotUpgradeCost}";
-        _superRobotUpCostText.text = $"{_superRobotUpgradeCost}";
-
-        _upgradeCostText.text = $"강화 + {UpgradeCount}(성공확률: {100f / UpgradeCount}%)\n{_upgradeCost}";
-
-        _robotGameObject.SetActive(RobotUpgradeCount > 0);
-        _superRobotGameObject.SetActive(SuperRobotUpgradeCount > 0);
+        _score += score;
+        UIManager.instance.SetScoreBoardText(_score, CurrentHitValue, UpgradeCount);
     }
 
     public void ValueUp()
     {
-        if (Score >= _valueUpCost)
+        if (_score >= _valueUpCost)
         {
-            Score -= _valueUpCost;
+            _score -= _valueUpCost;
             _valueUpCost = (int)(100 * Mathf.Pow(1.2f, (CurrentHitValue - 10)/5));
 
             CurrentHitValue += 5;
         }
-        SetScore();
+
+        UIManager.instance.SetValueUpButton(_valueUpCost, CurrentHitValue - 10);
+        UIManager.instance.SetScoreBoardText(_score, CurrentHitValue, UpgradeCount);
     }
 
     public void Robot()
     {
-        if (Score >= _robotUpgradeCost)
+        if (_score >= _robotUpgradeCost)
         {
-            Score -= _robotUpgradeCost;
+            _score -= _robotUpgradeCost;
             _robotUpgradeCost = (int)(1000 * Mathf.Pow(1.2f, RobotUpgradeCount));
 
             RobotUpgradeCount += 1;
+
+            _robotGameObject.SetActive(true);
+            UIManager.instance.SetRobotUpButton(_robotUpgradeCost, RobotUpgradeCount);
         }
-        SetScore();
     }
 
     public void SuperRobot()
     {
-        if (Score >= _superRobotUpgradeCost)
+        if (_score >= _superRobotUpgradeCost)
         {
-            Score -= _superRobotUpgradeCost;
+            _score -= _superRobotUpgradeCost;
             SuperRobotUpgradeCount += 1;
+
             _superRobotUpgradeCost = (int)(5000 * Mathf.Pow(1.2f, SuperRobotUpgradeCount));
 
-            RenderSettings.skybox = skyBoxMaterial;
+            _superRobotGameObject.SetActive(true);
+            UIManager.instance.SetRobotUpButton(_superRobotUpgradeCost, SuperRobotUpgradeCount);
         }
-        SetScore();
     }
 
     public void OnRobotControllButtonClick()
@@ -125,22 +122,23 @@ public class GameManager : MonoBehaviour
 
     public void OnUpgradeButtonClick()
     {
-        if (Score >= _upgradeCost)
+        if (_score >= _upgradeCost)
         {
-            Score -= _upgradeCost;
+            _score -= _upgradeCost;
 
-            if (Random.Range(0, 100) <= 100 / UpgradeCount)
+            if (UnityEngine.Random.Range(0, 100) <= 100 / UpgradeCount)
             {
                 UpgradeCount += 1;
                 _upgradeCost = (int)(10000 * Mathf.Pow(1.4f, UpgradeCount));
             }
         }
-        SetScore();
+        UIManager.instance.SetUpgradeButton(UpgradeCount, _upgradeCost);
+        UIManager.instance.SetScoreBoardText(_score, CurrentHitValue, UpgradeCount);
     }
 
     public void OnClickDataSave()
     {
-        PlayerPrefs.SetInt("Score", Score);
+        PlayerPrefs.SetInt("Score", _score);
         PlayerPrefs.SetInt("CurrentHitValue", CurrentHitValue);
         PlayerPrefs.SetInt("RobotUpgradeCount", RobotUpgradeCount);
         PlayerPrefs.SetInt("SuperRobotUpgradeCount", SuperRobotUpgradeCount);
@@ -150,7 +148,7 @@ public class GameManager : MonoBehaviour
 
     public void OnClickDataLoad()
     {
-        Score = PlayerPrefs.GetInt("Score");
+        _score = PlayerPrefs.GetInt("Score");
         CurrentHitValue = PlayerPrefs.GetInt("CurrentHitValue");
         RobotUpgradeCount = PlayerPrefs.GetInt("RobotUpgradeCount");
         SuperRobotUpgradeCount = PlayerPrefs.GetInt("SuperRobotUpgradeCount");
@@ -160,9 +158,8 @@ public class GameManager : MonoBehaviour
         _superRobotUpgradeCost = (int)(5000 * Mathf.Pow(1.2f, SuperRobotUpgradeCount));
         _upgradeCost = (int)(10000 * Mathf.Pow(1.4f, UpgradeCount));
 
-
-
-        SetScore();
+        _robotGameObject.SetActive(RobotUpgradeCount > 0);
+        _superRobotGameObject.SetActive(SuperRobotUpgradeCount > 0);
     }
 
     public void OnClickDataDelete()
@@ -170,5 +167,12 @@ public class GameManager : MonoBehaviour
         PlayerPrefs.DeleteAll();
 
         _loadButton.interactable = false;
+    }
+
+    public void RobotDestroy(object sender, EventArgs e)
+    {
+        _robotGameObject.SetActive(false);
+        RobotUpgradeCount = 0;
+        UIManager.instance.SetRobotUpButton(_robotUpgradeCost, RobotUpgradeCount);
     }
 }
