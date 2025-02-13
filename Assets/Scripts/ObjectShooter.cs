@@ -31,6 +31,7 @@ public class ObjectShooter : MonoBehaviour
         else
         {
             GameManager.instance.ScorePlus(GameManager.instance.CurrentHitValue * GameManager.instance.UpgradeCount);
+  
             Destroy(gameObject);
         }
     }

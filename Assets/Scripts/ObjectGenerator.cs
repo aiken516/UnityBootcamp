@@ -10,7 +10,7 @@ public class ObjectGenerator : MonoBehaviour
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
-        { 
+        {
             GameObject thrown = Instantiate(prefab, transform.position, transform.rotation);
 
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);

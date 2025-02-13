@@ -36,19 +36,19 @@ public class UIManager : MonoBehaviour
     public void SetValueUpButton(int valueUpCost, int valueUpCount)
     {
         _valueUpCostText.text = $"{valueUpCost}";
-        _valueUpCountText.text = $"{valueUpCount}";
+        _valueUpCountText.text = $"+{valueUpCount}";
     }
 
     public void SetRobotUpButton(int robotUpCost, int robotUpCount)
     {
         _robotUpCostText.text = $"{robotUpCost}";
-        _robotUpCountText.text = $"{robotUpCount}";
+        _robotUpCountText.text = $"+{robotUpCount}";
     }
 
     public void SetSuperRobotUpButton(int superRobotUpCost, int superRobotUpCount)
     {
         _superRobotUpCostText.text = $"{superRobotUpCost}";
-        _superRobotUpCountText.text = $"{superRobotUpCount}";
+        _superRobotUpCountText.text = $"+{superRobotUpCount}";
     }
 
     public void SetUpgradeButton(int upgradeCount, int upgradeCost)

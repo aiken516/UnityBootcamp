@@ -64,6 +64,16 @@ public class GameManager : MonoBehaviour
         _superRobotGameObject.SetActive(false);
 
         PlayerManager.instance.PlayerDeadEvent.PlayerDead += RobotDestroy;
+        RefreshAllUI();
+    }
+
+    private void RefreshAllUI()
+    {
+        UIManager.instance.SetScoreBoardText(_score, CurrentHitValue, UpgradeCount);
+        UIManager.instance.SetValueUpButton(_valueUpCost, (CurrentHitValue - 10) / 5);
+        UIManager.instance.SetRobotUpButton(_robotUpgradeCost, RobotUpgradeCount);
+        UIManager.instance.SetSuperRobotUpButton(_superRobotUpgradeCost, SuperRobotUpgradeCount);
+        UIManager.instance.SetUpgradeButton(UpgradeCount, _upgradeCost);
     }
 
     public void ScorePlus(int score)
@@ -110,7 +120,7 @@ public class GameManager : MonoBehaviour
             _superRobotUpgradeCost = (int)(5000 * Mathf.Pow(1.2f, SuperRobotUpgradeCount));
 
             _superRobotGameObject.SetActive(true);
-            UIManager.instance.SetRobotUpButton(_superRobotUpgradeCost, SuperRobotUpgradeCount);
+            UIManager.instance.SetSuperRobotUpButton(_superRobotUpgradeCost, SuperRobotUpgradeCount);
         }
     }
 
@@ -160,6 +170,8 @@ public class GameManager : MonoBehaviour
 
         _robotGameObject.SetActive(RobotUpgradeCount > 0);
         _superRobotGameObject.SetActive(SuperRobotUpgradeCount > 0);
+
+        RefreshAllUI();
     }
 
     public void OnClickDataDelete()
